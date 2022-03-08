@@ -1,10 +1,10 @@
-@extends("layaout")
+@extends("layouts.app")
 
 @section('title')
     post {{ $post->id }}
 @endsection
 
-@section('content')
+@section('main-content')
     <div class="card text-center">
         <div class="card-header">
             Post details

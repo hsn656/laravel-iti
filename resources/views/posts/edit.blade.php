@@ -1,10 +1,10 @@
-@extends("layaout")
+@extends("layouts.app")
 
 @section('title')
     Edit Post
 @endsection
 
-@section('content')
+@section('main-content')
     <form class="form-control" action="{{ route('posts.update', $post->id) }}" method="Post">
 
         @csrf
@@ -19,7 +19,7 @@
             <input type="text" name="description" class="form-control" value="{{ $post['description'] }}">
         </div>
 
-        <div class="mb-3">
+        {{-- <div class="mb-3">
             <label class="form-label">Posted by</label>
             <select name="user_id" id="users" class="form-select" aria-label="Default select example">
                 @foreach ($users as $user)
@@ -27,7 +27,7 @@
                         {{ $user->name }}</option>
                 @endforeach
             </select>
-        </div>
+        </div> --}}
 
         <div class="mb-3 text-center">
             <input type="submit" class="btn btn-success">

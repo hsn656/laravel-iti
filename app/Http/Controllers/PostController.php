@@ -5,9 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
+
+
+
+    function __construct()
+    {
+        $this->middleware("auth")->only("store", "update", "destroy");
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +24,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::orderByDesc("id")->get();
         return view("posts.index", ["posts" => $posts]);
     }
 
@@ -26,8 +35,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        $users = User::all();
-        return view("posts.create", ["users" => $users]);
+        return view("posts.create");
     }
 
     /**
@@ -38,7 +46,9 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        Post::create($request->all());
+        if ($request->user_id == Auth::user()->id) {
+            Post::create($request->all());
+        }
         return redirect(route("posts.index"), 302);
     }
 
@@ -74,10 +84,8 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-
         $post->title = $request->title;
         $post->description = $request->description;
-        $post->user_id = $request->user_id;
         $post->save();
         return redirect(route("posts.index"), 302);
     }
