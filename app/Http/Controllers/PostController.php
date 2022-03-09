@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostRequest;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Cviebrock\EloquentSluggable\Services\SlugService;
 
 class PostController extends Controller
 {
@@ -24,7 +26,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::orderByDesc("id")->get();
+        $posts = Post::orderByDesc("id")->with("user")->paginate(5);
         return view("posts.index", ["posts" => $posts]);
     }
 
@@ -44,11 +46,18 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+
     public function store(Request $request)
     {
         if ($request->user_id == Auth::user()->id) {
-            Post::create($request->all());
+            $post = Post::create([
+                'title' => $request->title,
+                'user_id' => $request->user_id,
+                'description' => $request->description,
+            ]);
         }
+
         return redirect(route("posts.index"), 302);
     }
 
@@ -82,7 +91,7 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(PostRequest $request, Post $post)
     {
         $post->title = $request->title;
         $post->description = $request->description;

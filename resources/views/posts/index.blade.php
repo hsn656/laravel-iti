@@ -15,6 +15,7 @@
                 <th> Title </th>
                 <th> Description </th>
                 <th> posted by </th>
+                <th> slog </th>
                 <th> View </th>
                 <th> Edit </th>
                 <th> Delete </th>
@@ -25,6 +26,7 @@
                     <td>{{ $post['title'] }}</td>
                     <td>{{ $post['description'] }}</td>
                     <td>{{ $post->user->name }}</td>
+                    <td>{{ $post['slug'] }}</td>
                     <td><a href="{{ route('posts.show', $post['id']) }}" class="btn btn-info">View </a></td>
                     <td>
                         @if (Auth::user()->id == $post->user_id)
@@ -55,9 +57,8 @@
             @endforeach
 
         </table>
-        <div class="text-center m-3">
 
-        </div>
+        {{ $posts->links() }}
 
     </div>
 @endsection

@@ -5,6 +5,7 @@
 @endsection
 
 @section('main-content')
+    <a href="{{ route('posts.index') }}" class="btn btn-primary mb-3 ">back to all posts</a>
     <form class="form-control" action="{{ route('posts.update', $post->id) }}" method="Post">
 
         @csrf
@@ -13,6 +14,9 @@
         <div class="mb-3">
             <label class="form-label">Title</label>
             <input type="text" name="title" class="form-control" value="{{ $post['title'] }}">
+            @error('title')
+                <div class=" my-2 text-danger">{{ $message }}</div>
+            @enderror
         </div>
         <div class="mb-3">
             <label class="form-label">Description</label>
