@@ -37,6 +37,7 @@ class PostRequest extends FormRequest
                 "required", "min:5",
                 "unique:posts,title",
                 new PostLimitation
+
             ]]);
         }
         return $validationArr;
