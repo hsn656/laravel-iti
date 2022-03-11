@@ -17,6 +17,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+// Route::group(['prefix' => 'admin'], function () {
+//     Route::get('users', function () {
+//         // Matches The "/admin/users" URL
+//         return "users for admin";
+//     });
+// });
+
 Route::resources([
     'posts' => PostController::class,
 ]);

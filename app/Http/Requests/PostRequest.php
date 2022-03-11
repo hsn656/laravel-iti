@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\PostLimitation;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PostRequest extends FormRequest
@@ -26,7 +27,18 @@ class PostRequest extends FormRequest
         $validationArr = [
             "description" => "required",
         ];
-        $validationArr = array_merge($validationArr, ["title" => "required|min:5|unique:posts,title,{$this->post->id}"]);
+        if (request()->method == "PUT") {
+            $validationArr = array_merge($validationArr, ["title" => [
+                "required", "min:5",
+                "unique:posts,title,{$this->post->id}"
+            ]]);
+        } else if (request()->method == "POST") {
+            $validationArr = array_merge($validationArr, ["title" => [
+                "required", "min:5",
+                "unique:posts,title",
+                new PostLimitation
+            ]]);
+        }
         return $validationArr;
     }
 

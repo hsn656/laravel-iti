@@ -16,7 +16,7 @@ class PostController extends Controller
 
     function __construct()
     {
-        $this->middleware("auth")->only("store", "update", "destroy");
+        $this->middleware("auth")->only("store", "update");
     }
 
     /**
@@ -48,8 +48,11 @@ class PostController extends Controller
      */
 
 
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
+        $request->user_id = 5;
+        $request["user_id"] = 4;
+        dd($request->user_id, Auth::user()->id);
         if ($request->user_id == Auth::user()->id) {
             $post = Post::create([
                 'title' => $request->title,
