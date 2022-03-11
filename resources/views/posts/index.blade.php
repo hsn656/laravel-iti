@@ -29,20 +29,18 @@
                     <td>{{ $post['slug'] }}</td>
                     <td><a href="{{ route('posts.show', $post['id']) }}" class="btn btn-info">View </a></td>
                     <td>
-                        {{-- @if (Auth::user()->id == $post->user_id) --}}
-                        @if (true)
+                        @can('update', $post)
                             <a href="{{ route('posts.edit', $post['id']) }}" class="btn btn-warning">Edit </a>
                         @else
                             not allowed
-                        @endif
-
+                        @endcan
                     </td>
                     <td>
-                        <a data-token="{{ csrf_token() }}" data-id={{ $post->id }} onclick="deletePost(event)"
-                            class="btn btn-warning">dekete ajax </a>
+                        @can('update', $post)
+                            <a data-token="{{ csrf_token() }}" data-id={{ $post->id }} onclick="deletePost(event)"
+                                class="btn btn-warning">dekete ajax </a>
 
-                        {{-- @if (Auth::user()->id == $post->user_id) --}}
-                        @if (true)
+                            {{-- @if (Auth::user()->id == $post->user_id) --}}
                             <form action="{{ route('posts.destroy', $post->id) }}" method="Post">
                                 @csrf
                                 @method('DELETE')
@@ -50,7 +48,7 @@
                             </form>
                         @else
                             not allowed
-                        @endif
+                        @endcan
 
 
                     </td>
@@ -70,7 +68,7 @@
     function deletePost(e) {
         if (confirm("Are you sure?")) {
             let id = e.target.dataset.id;
-            let token = e.target.dataset.   ;
+            let token = e.target.dataset.;
 
             fetch("posts/" + id, {
                 method: 'DELETE',
