@@ -52,14 +52,13 @@ class PostController extends Controller
     {
         $request->user_id = 5;
         $request["user_id"] = 4;
-        dd($request->user_id, Auth::user()->id);
-        if ($request->user_id == Auth::user()->id) {
-            $post = Post::create([
-                'title' => $request->title,
-                'user_id' => $request->user_id,
-                'description' => $request->description,
-            ]);
-        }
+        $this->authorize("create", $request);
+
+        $post = Post::create([
+            'title' => $request->title,
+            'user_id' => $request->user_id,
+            'description' => $request->description,
+        ]);
 
         return redirect(route("posts.index"), 302);
     }
@@ -96,6 +95,7 @@ class PostController extends Controller
      */
     public function update(PostRequest $request, Post $post)
     {
+        $this->authorize("update", $post);
         $post->title = $request->title;
         $post->description = $request->description;
         $post->save();
